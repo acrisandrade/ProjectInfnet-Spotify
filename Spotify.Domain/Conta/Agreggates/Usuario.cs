@@ -1,4 +1,5 @@
 ﻿using Spotify.Domain.Conta.ValueObject;
+using Spotify.Domain.Streaming.Aggregates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,9 @@ namespace Spotify.Domain.Conta.Agreggates
         public CPF CPF { get; set; }
 
         public List <Cartao> Cartoes { get; set;}
+
+        public List <Playlist> Playlists { get; set; }
+        public  List <Banda> BandasFavoritas { get; set; }    
     }
+
 }

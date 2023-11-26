@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Spotify.Domain.Streaming.Aggregates
 {
-    internal class Plano
+    public class Plano
     {
+
     }
 }

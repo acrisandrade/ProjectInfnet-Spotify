@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Spotify.Domain.Streaming.Aggregates
 {
-    internal class Album
+    public class Album
     {
+        public Guid id {  get; set; }   
+        public string Nome { get; set; }    
+        public Banda  Banda{ get; set; }
     }
 }
