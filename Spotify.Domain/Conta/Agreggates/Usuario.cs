@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Spotify.Domain.Conta.Agreggates
 {
-    internal class Usuario
+    public class Usuario
     {
         public Guid Id { get; set; }
         public String Nome { get; set; }
@@ -18,6 +18,8 @@ namespace Spotify.Domain.Conta.Agreggates
 
         public List <Playlist> Playlists { get; set; }
         public  List <Banda> BandasFavoritas { get; set; }    
+
+        public List <Assinatura>Assinaturas {  get; set; }    
     }
 
 }

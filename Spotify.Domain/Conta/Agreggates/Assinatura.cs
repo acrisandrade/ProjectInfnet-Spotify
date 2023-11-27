@@ -1,12 +1,20 @@
-﻿using System;
+﻿using Spotify.Domain.Streaming.Aggregates;
+using Spotify.Domain.Streaming.Aggregates.SpotifyLike.Domain.Streaming.Aggregates;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Spotify.Domain.Conta.Agreggates
 {
-    internal class Assinatura
+    public class Assinatura
     {
+        public Guid id {  get; set; }   
+        public Plano Plano { get; set; }    
+        public Boolean Ativo { get; set; }    
+        public DateTime DataAssinatura { get; set; }    
+
     }
 }
