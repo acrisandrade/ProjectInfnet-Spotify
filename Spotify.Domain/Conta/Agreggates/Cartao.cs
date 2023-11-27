@@ -14,22 +14,46 @@ namespace Spotify.Domain.Conta.Agreggates
         public Guid Id { get; set; }
         public Boolean Ativo { get; set; }
         public Decimal Limite { get; set; }
-        public string NumeroCartao { get; set; }
+        public String Numero { get; set; }
         public List<Transacao.Agreggates.Transacao>? Transacoes { get; set; }
 
-        public void Criarransacao(string Merchant, Decimal valor, string Descricao)
-        {
+        public Cartao() {
+            this.Transacoes = new List<Transacao.Agreggates.Transacao>();
+        } 
 
+        public void CriarTransacao(string merchant, Decimal valor, string descricao)
+        {
+            //Verificando se o cartao esta ativo
+            this.CartaoAtivo();
+            var transacao = new Transacao.Agreggates.Transacao();
+            transacao.Merchant = new Transacao.ValueObject.Merchant() { Nome = merchant };
+            transacao.ValorTransacao=valor;
+            transacao.Descricao = descricao;
+            transacao.DtTransacao=DateTime.Now;
+
+
+            //Verifica o limite
+            this.VerificaLimiteDisponivel(transacao);
+
+            //Validar a transacao
+            this.ValidarTransacao(transacao);
+
+
+            //Criar numero de autorizacao
+            transacao.Id=Guid.NewGuid();
+
+            //aDICIONAR NOVA TRANSACAO
+            this.Transacoes.Add(transacao);
         }
 
-        private bool CartaoAtivo()
+        private void CartaoAtivo()
         {
             if (this.Ativo == false)
             {
 
                 //Criar excessao de negocio
             }
-            return this.Ativo;
+        
         }
         private void VerificaLimiteDisponivel(Transacao.Agreggates.Transacao transacao)
         {

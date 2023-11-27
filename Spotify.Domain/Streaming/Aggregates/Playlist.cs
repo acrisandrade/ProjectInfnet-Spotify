@@ -15,6 +15,9 @@ namespace Spotify.Domain.Streaming.Aggregates
         public Usuario Usuario { get; set; }    
         public List<Musica> Musicas { get;}
 
-
+        public Playlist()
+        {
+                this.Musicas = new List<Musica>();
+        }
     }
 }

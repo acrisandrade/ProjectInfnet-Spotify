@@ -11,8 +11,9 @@ namespace Spotify.Domain.Conta.ValueObject
         public CPF (string numero)
         {
             this.Numero = numero;
-        }  
-        public string Numero { get; set; }  
+        }
+        public String Numero { get; set; }
+
         public string NumeroFormatado ()
         { 
         return Convert.ToInt64(this.Numero).ToString("###.###.###-##"); 

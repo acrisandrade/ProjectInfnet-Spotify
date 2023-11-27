@@ -1,5 +1,6 @@
 ﻿using Spotify.Domain.Conta.ValueObject;
 using Spotify.Domain.Streaming.Aggregates;
+using Spotify.Domain.Streaming.Aggregates.SpotifyLike.Domain.Streaming.Aggregates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,81 @@ namespace Spotify.Domain.Conta.Agreggates
         public  List <Banda> BandasFavoritas { get; set; }    
 
         public List <Assinatura>Assinaturas {  get; set; }    
+  
+
+        public Usuario()
+        {
+            this.Playlists = new List<Playlist>();
+            this.BandasFavoritas = new List<Banda>();
+            this.Assinaturas = new List<Assinatura>();
+
+        }
+
+
+    public void GerarUsuario(string nome,string cpf, Plano plano,Cartao cartao)
+        {
+            this.CPF = new CPF(cpf);
+            this.Nome = Nome;
+            this.CriarPlaylist();
+
+            //Adiciona o cartao na conta 
+            this.AdicionaCartao(cartao);
+            //Assina plano
+            this.AssinarPlano(plano,cartao);
+        }
+
+
+
+      
+
+
+        //Gerar uma Playlist default
+        public void CriarPlaylist(string nome = "favoritas")
+        {
+            this.Playlists.Add(new Playlist()
+            {
+                id = Guid.NewGuid(),
+                Nome = nome,
+                Publica = false,
+                Usuario = this
+            });
+        }
+
+
+
+
+        private void AdicionaCartao(Cartao cartao)
+        {
+            this.Cartoes.Add(cartao);
+
+        }
+
+
+
+        public void AssinarPlano(Plano plano,Cartao cartao)
+        {
+            //Debita o valor do plano no cartao
+            cartao.CriarTransacao(plano.Nome, plano.Valor, plano.Descricao);
+
+            //Desativa a assinatura se ja tiver uma
+            if(this.Assinaturas.Count > 0 && this.Assinaturas.Any(x => x.Ativo))
+            {
+                var planoAtivo = this.Assinaturas.FirstOrDefault(x => x.Ativo);
+                planoAtivo.Ativo = false;
+            }
+            //Insere nova assinatura
+            this.Assinaturas.Add(new Assinatura()
+            {
+
+                Ativo = true,
+                DataAssinatura = DateTime.Now,
+                Plano = plano,
+                id = Guid.NewGuid()
+            });
+        }
+    
+    
+    
     }
 
 }
