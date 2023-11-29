@@ -6,7 +6,26 @@ using System.Threading.Tasks;
 
 namespace Spotify.Core.Exception
 {
-    internal class BussinesException
+    public class BussinesException : System.Exception
     {
+        public List<BusinessValidation> Erros {  get; set; } = new List<BusinessValidation>();
+
+        public void AdicionaErro(BusinessValidation validation)
+        {
+            this.Erros.Add(validation);
+        }
+
+        public void EnviaExcessao()
+        {
+            if (this.Erros.Any())
+                throw this;
+        }
+
+    }
+
+    public class BusinessValidation
+    {
+        public string NomeErroDefaul { get; set; } = "Erro de validaçâo!";
+        public string MensagemErro { get; set; }
     }
 }

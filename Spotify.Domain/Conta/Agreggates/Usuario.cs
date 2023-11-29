@@ -74,7 +74,7 @@ namespace Spotify.Domain.Conta.Agreggates
 
         public void AssinarPlano(Plano plano,Cartao cartao)
         {
-            //Debita o valor do plano no cartao
+                   //Debita o valor do plano no cartao
             cartao.CriarTransacao(plano.Nome, plano.Valor, plano.Descricao);
 
             //Desativa a assinatura se ja tiver uma

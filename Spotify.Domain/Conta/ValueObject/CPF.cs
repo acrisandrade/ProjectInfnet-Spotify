@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Spotify.Domain.Conta.Exception;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,18 @@ namespace Spotify.Domain.Conta.ValueObject
 {
     public class CPF
     {
+        private CPFException _validacaoErro = new CPFException();
         public CPF (string numero)
         {
             this.Numero = numero;
+            if(this.ValidarCPF() == false )
+            {
+
+                this._validacaoErro.AdicionaErro(new Core.Exception.BusinessValidation()
+                {
+                    MensagemErro="CPF Invalido!",NomeErroDefaul=nameof(CPFException)
+                });
+            }
         }
         public String Numero { get; set; }
 

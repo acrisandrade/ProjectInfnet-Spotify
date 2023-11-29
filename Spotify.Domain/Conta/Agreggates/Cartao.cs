@@ -1,4 +1,5 @@
-﻿using Spotify.Domain.Transacao.Agreggates;
+﻿using Spotify.Domain.Conta.Exception;
+using Spotify.Domain.Transacao.Agreggates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,11 @@ namespace Spotify.Domain.Conta.Agreggates
 
         public void CriarTransacao(string merchant, Decimal valor, string descricao)
         {
+            var erroValidacao = new CartaoException();
+
+
             //Verificando se o cartao esta ativo
-            this.CartaoAtivo();
+            this.CartaoAtivo(erroValidacao);
             var transacao = new Transacao.Agreggates.Transacao();
             transacao.Merchant = new Transacao.ValueObject.Merchant() { Nome = merchant };
             transacao.ValorTransacao=valor;
@@ -33,45 +37,65 @@ namespace Spotify.Domain.Conta.Agreggates
 
 
             //Verifica o limite
-            this.VerificaLimiteDisponivel(transacao);
+            this.VerificaLimiteDisponivel(transacao, erroValidacao);
+            
 
-            //Validar a transacao
-            this.ValidarTransacao(transacao);
-
+            //Validar a transacao, e verifica se nao ocorreu erros na validacao
+            this.ValidarTransacao(transacao, erroValidacao);
+            erroValidacao.EnviaExcessao();
 
             //Criar numero de autorizacao
             transacao.Id=Guid.NewGuid();
 
+            //Debita o valor do limite
+            this.Limite = this.Limite - transacao.ValorTransacao;
+
             //aDICIONAR NOVA TRANSACAO
             this.Transacoes.Add(transacao);
+            
+
+
+
+
         }
 
-        private void CartaoAtivo()
+        private void CartaoAtivo(CartaoException erroValidacao)
         {
             if (this.Ativo == false)
             {
+                erroValidacao.AdicionaErro(new Core.Exception.BusinessValidation()
+                {
+                    MensagemErro = "Você não possui limite suficiente no cartão!",
+                    NomeErroDefaul = nameof(CartaoException)
 
-                //Criar excessao de negocio
+                });
             }
         
         }
-        private void VerificaLimiteDisponivel(Transacao.Agreggates.Transacao transacao)
+        private void VerificaLimiteDisponivel(Transacao.Agreggates.Transacao transacao,CartaoException erroValidacao )
         {
             if (transacao.ValorTransacao > this.Limite)
             {
-                //Criar  excecao de negocios
+                erroValidacao.AdicionaErro(new Core.Exception.BusinessValidation()
+                {
+                    MensagemErro = "Este cartão não está ativo!",
+                    NomeErroDefaul = nameof(CartaoException)
+                });
             }
         }
-        private void ValidarTransacao(Transacao.Agreggates.Transacao transacao)
+        private void ValidarTransacao(Transacao.Agreggates.Transacao transacao,CartaoException erroValidacao)
         {
             var transacoesRecentes = this.Transacoes.Where(x => x.DtTransacao >= DateTime.Now.AddMinutes(INTERVALO_TRANSACAO));
             if (transacoesRecentes?.Count() >= 3)
             {
-                //Criar regras de exccao
+                erroValidacao.AdicionaErro(new Core.Exception.BusinessValidation() { MensagemErro = "você excedeu o limite de periodo de compras do cartão!", NomeErroDefaul = nameof(CartaoException) });
             }
+
+
             if (transacoesRecentes?.Where(x => x.Merchant.Nome.ToUpper() == transacao.Merchant.Nome.ToUpper()
                                                    && x.ValorTransacao == transacao.ValorTransacao).Count() == REPETIÇAO_TRANSACAO)
             {
+                erroValidacao.AdicionaErro(new Core.Exception.BusinessValidation() { MensagemErro = "Transação Duplicada!", NomeErroDefaul = nameof(CartaoException) });
 
             }
         }
