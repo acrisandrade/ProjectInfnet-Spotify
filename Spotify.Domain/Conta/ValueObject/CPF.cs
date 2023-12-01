@@ -10,16 +10,19 @@ namespace Spotify.Domain.Conta.ValueObject
     public class CPF
     {
         private CPFException _validacaoErro = new CPFException();
+
+        public CPF() { }
         public CPF (string numero)
         {
             this.Numero = numero;
             if(this.ValidarCPF() == false )
             {
 
-                this._validacaoErro.AdicionaErro(new Core.Exception.BusinessValidation()
+                this._validacaoErro.EnviaExcessao(new Core.Exception.BusinessValidation()
                 {
                     MensagemErro="CPF Invalido!",NomeErroDefaul=nameof(CPFException)
                 });
+                this._validacaoErro.TesteValidacao();
             }
         }
         public String Numero { get; set; }

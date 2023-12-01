@@ -28,6 +28,7 @@ namespace Spotify.Domain.Conta.Agreggates
             this.Playlists = new List<Playlist>();
             this.BandasFavoritas = new List<Banda>();
             this.Assinaturas = new List<Assinatura>();
+            this.Cartoes = new List<Cartao>(); 
 
         }
 
@@ -35,13 +36,17 @@ namespace Spotify.Domain.Conta.Agreggates
     public void GerarUsuario(string nome,string cpf, Plano plano,Cartao cartao)
         {
             this.CPF = new CPF(cpf);
-            this.Nome = Nome;
-            this.CriarPlaylist();
+            this.Nome = nome;
+           
 
+
+            //Assina plano
+            this.AssinarPlano(plano, cartao);
             //Adiciona o cartao na conta 
             this.AdicionaCartao(cartao);
-            //Assina plano
-            this.AssinarPlano(plano,cartao);
+            //cria playlist
+            this.CriarPlaylist();
+
         }
 
 
@@ -50,7 +55,7 @@ namespace Spotify.Domain.Conta.Agreggates
 
 
         //Gerar uma Playlist default
-        public void CriarPlaylist(string nome = "favoritas")
+        public void CriarPlaylist(string nome = "Favoritas")
         {
             this.Playlists.Add(new Playlist()
             {

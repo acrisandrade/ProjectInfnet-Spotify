@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Spotify.Tests.Conta
+namespace Spotify.Tests.Domain.Conta
 {
     internal class CartaoTest
     {

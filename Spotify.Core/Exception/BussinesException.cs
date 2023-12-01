@@ -10,12 +10,19 @@ namespace Spotify.Core.Exception
     {
         public List<BusinessValidation> Erros {  get; set; } = new List<BusinessValidation>();
 
-        public void AdicionaErro(BusinessValidation validation)
+        public BussinesException() { }
+
+        public  BussinesException(BusinessValidation validation)
         {
-            this.Erros.Add(validation);
+            this.EnviaExcessao(validation);
         }
 
-        public void EnviaExcessao()
+        public void EnviaExcessao(BusinessValidation validation)
+        {
+           this.Erros.Add(validation); 
+        }
+
+        public void TesteValidacao()
         {
             if (this.Erros.Any())
                 throw this;

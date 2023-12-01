@@ -42,7 +42,7 @@ namespace Spotify.Domain.Conta.Agreggates
 
             //Validar a transacao, e verifica se nao ocorreu erros na validacao
             this.ValidarTransacao(transacao, erroValidacao);
-            erroValidacao.EnviaExcessao();
+            erroValidacao.TesteValidacao();
 
             //Criar numero de autorizacao
             transacao.Id=Guid.NewGuid();
@@ -63,7 +63,7 @@ namespace Spotify.Domain.Conta.Agreggates
         {
             if (this.Ativo == false)
             {
-                erroValidacao.AdicionaErro(new Core.Exception.BusinessValidation()
+                erroValidacao.EnviaExcessao(new Core.Exception.BusinessValidation()
                 {
                     MensagemErro = "Você não possui limite suficiente no cartão!",
                     NomeErroDefaul = nameof(CartaoException)
@@ -76,7 +76,7 @@ namespace Spotify.Domain.Conta.Agreggates
         {
             if (transacao.ValorTransacao > this.Limite)
             {
-                erroValidacao.AdicionaErro(new Core.Exception.BusinessValidation()
+                erroValidacao.EnviaExcessao(new Core.Exception.BusinessValidation()
                 {
                     MensagemErro = "Este cartão não está ativo!",
                     NomeErroDefaul = nameof(CartaoException)
@@ -88,14 +88,14 @@ namespace Spotify.Domain.Conta.Agreggates
             var transacoesRecentes = this.Transacoes.Where(x => x.DtTransacao >= DateTime.Now.AddMinutes(INTERVALO_TRANSACAO));
             if (transacoesRecentes?.Count() >= 3)
             {
-                erroValidacao.AdicionaErro(new Core.Exception.BusinessValidation() { MensagemErro = "você excedeu o limite de periodo de compras do cartão!", NomeErroDefaul = nameof(CartaoException) });
+                erroValidacao.EnviaExcessao(new Core.Exception.BusinessValidation() { MensagemErro = "você excedeu o limite de periodo de compras do cartão!", NomeErroDefaul = nameof(CartaoException) });
             }
 
 
             if (transacoesRecentes?.Where(x => x.Merchant.Nome.ToUpper() == transacao.Merchant.Nome.ToUpper()
                                                    && x.ValorTransacao == transacao.ValorTransacao).Count() == REPETIÇAO_TRANSACAO)
             {
-                erroValidacao.AdicionaErro(new Core.Exception.BusinessValidation() { MensagemErro = "Transação Duplicada!", NomeErroDefaul = nameof(CartaoException) });
+                erroValidacao.EnviaExcessao(new Core.Exception.BusinessValidation() { MensagemErro = "Transação Duplicada!", NomeErroDefaul = nameof(CartaoException) });
 
             }
         }
