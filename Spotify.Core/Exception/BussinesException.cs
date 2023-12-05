@@ -12,7 +12,7 @@ namespace Spotify.Core.Exception
 
         public BussinesException() { }
 
-        public  BussinesException(BusinessValidation validation)
+        public BussinesException(BusinessValidation validation)
         {
             this.EnviaExcessao(validation);
         }

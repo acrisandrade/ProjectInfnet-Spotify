@@ -7,9 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Conta\" />
     <Folder Include="Transacao\" />
     <Folder Include="Streaming\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Spotify.Core\Spotify.Core.csproj" />
+    <ProjectReference Include="..\Spotify.Domain\Spotify.Domain.csproj" />
+    <ProjectReference Include="..\Spotify.Repository\Spotify.Repository.csproj" />
   </ItemGroup>
 
 </Project>

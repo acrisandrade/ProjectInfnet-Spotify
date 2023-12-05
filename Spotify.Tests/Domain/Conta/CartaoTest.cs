@@ -67,18 +67,37 @@ namespace Spotify.Tests.Domain.Conta
                 Numero = "1234567890"
 
             };
+
             cartao.Transacoes.Add(new Spotify.Domain.Transacao.Agreggates.Transacao()
             {
-                DtTransacao=DateTime.Now,
-                Id=Guid.NewGuid(),
-                Merchant= new Spotify.Domain.Transacao.ValueObject.Merchant()
+                DtTransacao = DateTime.Now.AddMinutes(-1),
+                Id = Guid.NewGuid(),
+                Merchant = new Spotify.Domain.Transacao.ValueObject.Merchant()
                 {
-                    Nome="Star"
+                    Nome = "Star"
 
-                },ValorTransacao=23M,
-                Descricao="Pagamento"
+                },
+                ValorTransacao = 23M,
+                Descricao = "Pagamento"
 
             });
+
+
+
+            cartao.Transacoes.Add(new Spotify.Domain.Transacao.Agreggates.Transacao()
+            {
+                DtTransacao = DateTime.Now,
+                Id = Guid.NewGuid(),
+                Merchant = new Spotify.Domain.Transacao.ValueObject.Merchant()
+                {
+                    Nome = "Star"
+
+                },
+                ValorTransacao = 23M,
+                Descricao = "Pagamento"
+
+            });
+
 
 
             Assert.Throws<CartaoException>(() => cartao.CriarTransacao("star", 23M, "Pagamento plano"));
