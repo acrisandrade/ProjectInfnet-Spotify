@@ -83,20 +83,27 @@ namespace Spotify.Domain.Conta.Agreggates
                 });
             }
         }
-        private void ValidarTransacao(Transacao.Agreggates.Transacao transacao,CartaoException erroValidacao)
+        private void ValidarTransacao(Transacao.Agreggates.Transacao transacao, CartaoException validationErrors)
         {
-            var transacoesRecentes = this.Transacoes.Where(x => x.DtTransacao >= DateTime.Now.AddMinutes(INTERVALO_TRANSACAO));
-            if (transacoesRecentes?.Count() >= 3)
+            var ultimasTransacoes = this.Transacoes.Where(x => x.DtTransacao >= DateTime.Now.AddMinutes(INTERVALO_TRANSACAO));
+
+            if (ultimasTransacoes?.Count() >= 3)
             {
-                erroValidacao.EnviaExcessao(new Core.Exception.BusinessValidation() { MensagemErro = "você excedeu o limite de periodo de compras do cartão!", NomeErroDefaul = nameof(CartaoException) });
+                validationErrors.EnviaExcessao(new Core.Exception.BusinessValidation()
+                {
+                    MensagemErro = "Cartão utilizado muitas vezes em um período curto",
+                    NomeErroDefaul = nameof(CartaoException)
+                });
             }
 
-
-            if (transacoesRecentes?.Where(x => x.Merchant.Nome.ToUpper() == transacao.Merchant.Nome.ToUpper()
-                                                   && x.ValorTransacao == transacao.ValorTransacao).Count() == REPETIÇAO_TRANSACAO)
+            if (ultimasTransacoes?.Where(x => x.Merchant.Nome.ToUpper() == transacao.Merchant.Nome.ToUpper()
+                                         && x.ValorTransacao == transacao.ValorTransacao).Count() == REPETIÇAO_TRANSACAO)
             {
-                erroValidacao.EnviaExcessao(new Core.Exception.BusinessValidation() { MensagemErro = "Transação Duplicada!", NomeErroDefaul = nameof(CartaoException) });
-
+                validationErrors.EnviaExcessao(new Core.Exception.BusinessValidation()
+                {
+                    MensagemErro = "Transação duplicada para o mesmo cartão e mesmo merchant",
+                    NomeErroDefaul = nameof(CartaoException)
+                });
             }
         }
 

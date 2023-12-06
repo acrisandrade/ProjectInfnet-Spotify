@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Spotify.Tests.Domain.Conta
 {
-    public  class CartaoTest
+    public class CartaoTest
     {
         [Fact]
         public void CriaTransacaoComSucesso()
@@ -22,7 +22,7 @@ namespace Spotify.Tests.Domain.Conta
                 Numero = "1234567890"
             };
             cartao.CriarTransacao("star", 10M, "Pagamento plano");
-            Assert.True(cartao.Transacoes.Count>0);
+            Assert.True(cartao.Transacoes.Count > 0);
         }
 
 
@@ -64,8 +64,35 @@ namespace Spotify.Tests.Domain.Conta
                 Id = Guid.NewGuid(),
                 Ativo = true,
                 Limite = 2000M,
-                Numero = "1234567890"
+                Numero = "6465465466",
+            };
 
+            cartao.Transacoes.Add(new Spotify.Domain.Transacao.Agreggates.Transacao()
+            {
+                DtTransacao = DateTime.Now,
+                Id = Guid.NewGuid(),
+                Merchant = new Spotify.Domain.Transacao.ValueObject.Merchant()
+                {
+                    Nome = "star"
+                },
+                ValorTransacao = 19M,
+                Descricao = "Há uma nova compra!"
+            });
+
+            Assert.Throws<CartaoException>(
+                () => cartao.CriarTransacao("star", 19M, "Transacao!"));
+
+        }
+
+        [Fact]
+        public void NaoDeveCriarTransacaoComMuitaFrequencia()
+        {
+            Cartao cartao = new Cartao()
+            {
+                Id = Guid.NewGuid(),
+                Ativo = true,
+                Limite = 2000M,
+                Numero = "1234567890",
             };
 
             cartao.Transacoes.Add(new Spotify.Domain.Transacao.Agreggates.Transacao()
@@ -74,15 +101,23 @@ namespace Spotify.Tests.Domain.Conta
                 Id = Guid.NewGuid(),
                 Merchant = new Spotify.Domain.Transacao.ValueObject.Merchant()
                 {
-                    Nome = "Star"
-
+                    Nome = "star"
                 },
-                ValorTransacao = 23M,
-                Descricao = "Pagamento"
-
+                ValorTransacao = 19M,
+                Descricao = "Há uma nova compra!"
             });
 
-
+            cartao.Transacoes.Add(new Spotify.Domain.Transacao.Agreggates.Transacao()
+            {
+                DtTransacao = DateTime.Now.AddMinutes(-0.5),
+                Id = Guid.NewGuid(),
+                Merchant = new Spotify.Domain.Transacao.ValueObject.Merchant()
+                {
+                    Nome = "star"
+                },
+                ValorTransacao = 19M,
+                Descricao = "Há uma nova compra!"
+            });
 
             cartao.Transacoes.Add(new Spotify.Domain.Transacao.Agreggates.Transacao()
             {
@@ -90,18 +125,24 @@ namespace Spotify.Tests.Domain.Conta
                 Id = Guid.NewGuid(),
                 Merchant = new Spotify.Domain.Transacao.ValueObject.Merchant()
                 {
-                    Nome = "Star"
-
+                    Nome = "star"
                 },
-                ValorTransacao = 23M,
-                Descricao = "Pagamento"
-
+                ValorTransacao = 19M,
+                Descricao = "Há uma nova compra!"
             });
 
 
-
-            Assert.Throws<CartaoException>(() => cartao.CriarTransacao("star", 23M, "Pagamento plano"));
+            Assert.Throws<CartaoException>(
+                () => cartao.CriarTransacao("Dummy", 19M, "Dummy Transacao"));
         }
-
     }
+
+
 }
+
+
+
+
+    
+
+
