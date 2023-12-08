@@ -25,5 +25,12 @@ namespace Spotify.API.Controllers
             this._usuarioService.CriarConta(dtousuario);
             return Created($"/usuario/{dtousuario.Id}", dtousuario);
         }
+
+        [HttpGet]
+        public IActionResult ObtemUsuario(Guid id)
+        {
+            var result = this._usuarioService.ObtemUsuario(id);
+                return result;
+        }
     }
 }

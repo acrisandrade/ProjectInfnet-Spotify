@@ -20,22 +20,22 @@ namespace Spotify.Aplication.Conta
 
         private UsuarioRepository usuarioRepository = new UsuarioRepository();
 
-      
+
         public CriarContaDTO CriarConta(CriarContaDTO conta)
         {
-            
+
             Plano plano = this.planoRepository.PegarPlanoPeloID(conta.PlanoId);
 
             if (plano == null)
             {
                 new BussinesException(new BusinessValidation()
-                {MensagemErro = "Plano não encontrado", NomeErroDefaul = nameof(CriarConta)}).TesteValidacao();
+                { MensagemErro = "Plano não encontrado", NomeErroDefaul = nameof(CriarConta) }).TesteValidacao();
             }
 
             Cartao cartao = new Cartao();
-            cartao.Ativo= conta.Cartao.Ativo;
-            cartao.Numero= conta.Cartao.Numero; 
-            cartao.Limite= conta.Cartao.Limite;
+            cartao.Ativo = conta.Cartao.Ativo;
+            cartao.Numero = conta.Cartao.Numero;
+            cartao.Limite = conta.Cartao.Limite;
 
 
             Usuario usuario = new Usuario();
@@ -45,13 +45,29 @@ namespace Spotify.Aplication.Conta
 
             //gRAVA usuarios na base de dados
             this.usuarioRepository.IncluiUsuario(usuario);
-            conta.Id=usuario.Id;
+            conta.Id = usuario.Id;
 
 
             //Aqui retorna a conta que foi crida deste usuario
             return conta;
         }
-       
 
+        public CriarContaDTO ObtemUsuario(Guid id)
+        {
+            var usuario = this.usuarioRepository.ObtemUsuario(id);
+
+            CriarContaDTO result = new CriarContaDTO()
+            {
+                Id = usuario.Id,
+                Cartao = new CartaoDTO()
+                {
+                    Ativo = usuario.Cartoes.FirstOrDefault().Ativo,
+                    Limite = usuario.Cartoes.FirstOrDefault().Limite,
+                    Numero = "xxxxxxxx"
+                },
+                CPF = usuario.CPF.NumeroFormatado(),
+                Nome = usuario.Nome,
+            };
+    }
     }
 }

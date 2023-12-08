@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Spotify.API.Controllers;
 using Spotify.Aplication.Conta.Dto;
 using System;
@@ -27,7 +28,18 @@ namespace Spotify.Tests.Controller
                 },
                 PlanoId = new Guid("b2a55062-bc07-45dc-b4b2-6754877c1c31")
             };
+            var logger = LoggerFactory.Create(logger => logger.AddConsole()).CreateLogger<UsuarioController>();
+            var controller=new UsuarioController(logger);
+            var response = controller.CriaConta(criarContaDTO);
+
+
+            var responsecontent = (response as CreatedResult).Value;
+            Assert.True(responsecontent is CriarContaDTO);
+            Assert.True((responsecontent as CriarContaDTO).Id !=Guid.Empty);    
         
         }
     }
 }
+
+
+//TODO incrementar para banda
