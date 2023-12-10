@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Transacao\" />
-    <Folder Include="Streaming\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,5 +11,7 @@ namespace Spotify.Domain.Streaming.Aggregates
         public Guid id {  get; set; }   
         public string Nome { get; set; }    
         public Banda  Banda{ get; set; }
+
+        public List<Musica> MusicaList { get; set;} 
     }
 }

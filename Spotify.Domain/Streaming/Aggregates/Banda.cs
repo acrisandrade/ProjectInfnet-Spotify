@@ -12,5 +12,18 @@ namespace Spotify.Domain.Streaming.Aggregates
         public string Nome { get; set; }
         public string Descricao { get; set; }
 
+        public List<Album> Albums { get; set; }
+
+        public Banda()
+        {
+                    this.Albums = new List<Album>();
+        }
+
+        public void AdicionaAlbum(Album album)
+        {
+            this.Albums.Add(album);
+
+        }
+
     }
 }
