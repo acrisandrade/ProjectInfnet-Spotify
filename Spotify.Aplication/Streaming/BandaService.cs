@@ -11,8 +11,8 @@ namespace Spotify.Aplication.Streaming
 {
     public class BandaService
     {
-        private BandaRepository repository= new BandaRepository();
-        public BandaService() {}
+        private BandaRepository repository = new BandaRepository();
+        public BandaService() { }
         public BandaDto CriaBanda(BandaDto bandadto)
         {
             Banda banda = new Banda()
@@ -22,19 +22,82 @@ namespace Spotify.Aplication.Streaming
             };
 
 
-            if (bandadto != null )
+            if (bandadto != null)
             {
-                foreach(var item in bandadto.Albums)
+                foreach (var item in bandadto.Albums)
                 {
-                    banda.AdicionaAlbum(new Album()
+                    Album album = new Album()
                     {
-                        id = item.id,
-                        Nome=item.Nome
-                    });
+                        id = Guid.NewGuid(),
+                        Nome = item.Nome
+                    };
+                    if (item.musicas != null)
+                    {
+                        foreach (var musica in item.musicas)
+                        {
+                            album.AdicionaMusicas(new Musica()
+                            {
+                                Duracao = new Domain.Streaming.ValueObject.Duracao(musica.Duracao),
+                                Nome = musica.Nome,
+                                Album = album,
+                                Id = Guid.NewGuid()
+                            });
+
+                        }
+                    }
+                    banda.AdicionaAlbum(album);
+
                 }
             }
 
             this.repository.CriaBanda(banda);
+            bandadto.Id = banda.Id;
+            return bandadto;
+        }
+
+        public BandaDto ObterBanda(Guid id)
+        {
+            var banda = this.repository.ObtemBanda(id);
+
+            if (banda == null)
+                return null;
+
+            BandaDto dto = new BandaDto()
+            {
+                Id = banda.Id,
+                Descricao = banda.Descricao,
+                Nome = banda.Nome,
+            };
+
+            if (banda.Albums != null)
+            {
+                dto.Albums = new List<AlbumDto>();
+
+                foreach (var album in banda.Albums)
+                {
+                    AlbumDto albumDto = new AlbumDto()
+                    {
+                        id = album.id,
+                        Nome = album.Nome,
+                        musicas = new List<MusicaDto>()
+                    };
+
+                    album.MusicaS?.ForEach(m =>
+                    {
+                        albumDto.musicas.Add(new MusicaDto()
+                        {
+                            Id = m.Id,
+                            Duracao = m.Duracao.valor,
+                            Nome = m.Nome
+                        });
+                    });
+
+                    dto.Albums.Add(albumDto);
+                }
+            }
+
+            return dto;
+
         }
     }
 }

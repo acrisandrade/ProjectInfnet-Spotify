@@ -13,7 +13,14 @@ namespace Spotify.Repository.Streaming
 
         public void CriaBanda(Banda banda)
         {
-            throw new NotImplementedException();
+            banda.Id = Guid.NewGuid();
+            bandas.Add(banda);  
         }
+
+        public Banda ObtemBanda(Guid id)
+        {
+            return bandas.FirstOrDefault(x => x.Id==id);   
+        }
+       
     }
 }
