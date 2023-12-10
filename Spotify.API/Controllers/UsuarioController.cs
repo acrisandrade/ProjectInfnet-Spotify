@@ -26,11 +26,15 @@ namespace Spotify.API.Controllers
             return Created($"/usuario/{dtousuario.Id}", dtousuario);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult ObtemUsuario(Guid id)
         {
             var result = this._usuarioService.ObtemUsuario(id);
-                return result;
+
+            if (result == null)
+
+                return NotFound();
+        return Ok(result);
         }
     }
 }

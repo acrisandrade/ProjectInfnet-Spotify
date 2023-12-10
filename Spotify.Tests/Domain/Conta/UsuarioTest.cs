@@ -1,6 +1,6 @@
 ﻿using Spotify.Domain.Conta.Agreggates;
 using Spotify.Domain.Conta.Exception;
-using Spotify.Domain.Streaming.Aggregates.SpotifyLike.Domain.Streaming.Aggregates;
+using Spotify.Domain.Streaming.Aggregates;
 using System;
 using System.Collections.Generic;
 using System.Linq;

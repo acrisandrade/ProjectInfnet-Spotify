@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace Spotify.Domain.Streaming.Aggregates
 {
-    namespace SpotifyLike.Domain.Streaming.Aggregates
+    public class Plano
     {
-        public class Plano
-        {
-            public Guid Id { get; set; }
-            public string Nome { get; set; }
-            public string Descricao { get; set; }
-            public Decimal Valor { get; set; }
-        }
+        public Guid Id { get; set; }
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public Decimal Valor { get; set; }
     }
 }
+

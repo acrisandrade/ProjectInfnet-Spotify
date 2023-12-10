@@ -18,7 +18,7 @@ namespace Spotify.Tests.Application
             CriarContaDTO criarContaDTO = new CriarContaDTO()
             {
                 Nome = "Leia",
-                CPF = "311.945.920-82",
+                CPF = "31194592082",
                 Cartao = new CartaoDTO()
                 {
                     Ativo = true,

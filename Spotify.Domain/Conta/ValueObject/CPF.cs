@@ -4,35 +4,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Sources;
 
 namespace Spotify.Domain.Conta.ValueObject
 {
     public class CPF
     {
-        private CPFException _validacaoErro = new CPFException();
+        private CPFException _validationError = new CPFException();
 
         public CPF() { }
-        public CPF (string numero)
+
+        public CPF(string numero)
         {
             this.Numero = numero;
-            if(this.ValidarCPF() == false )
-            {
 
-                this._validacaoErro.EnviaExcessao(new Core.Exception.BusinessValidation()
+            if (this.IsValido() == false)
+            {
+                this._validationError.EnviaExcessao(new Core.Exception.BusinessValidation()
                 {
-                    MensagemErro="CPF Invalido!",NomeErroDefaul=nameof(CPFException)
+                    MensagemErro = "CPF Inválido",
+                    NomeErroDefaul = nameof(CPFException)
                 });
-                this._validacaoErro.TesteValidacao();
+
+                this._validationError.TesteValidacao();
             }
         }
+
         public String Numero { get; set; }
 
-        public string NumeroFormatado ()
-        { 
-        return Convert.ToInt64(this.Numero).ToString("###.###.###-##"); 
-        }  
-        //Valida se o numero inserio,e um CPF valido
-        public bool ValidarCPF()
+        public String NumeroFormatado()
+        {
+            return Convert.ToInt64(this.Numero).ToString("###.###.###-##");
+        }
+
+        public bool IsValido()
         {
             int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };

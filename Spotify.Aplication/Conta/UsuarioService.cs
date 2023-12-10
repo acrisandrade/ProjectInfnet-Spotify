@@ -1,7 +1,7 @@
 ﻿using Spotify.Aplication.Conta.Dto;
 using Spotify.Core.Exception;
 using Spotify.Domain.Conta.Agreggates;
-using Spotify.Domain.Streaming.Aggregates.SpotifyLike.Domain.Streaming.Aggregates;
+using Spotify.Domain.Streaming.Aggregates;
 using Spotify.Repository.Conta;
 using Spotify.Repository.Streaming;
 using System;
@@ -55,6 +55,8 @@ namespace Spotify.Aplication.Conta
         public CriarContaDTO ObtemUsuario(Guid id)
         {
             var usuario = this.usuarioRepository.ObtemUsuario(id);
+            if (usuario == null)
+                return null;
 
             CriarContaDTO result = new CriarContaDTO()
             {
@@ -68,6 +70,7 @@ namespace Spotify.Aplication.Conta
                 CPF = usuario.CPF.NumeroFormatado(),
                 Nome = usuario.Nome,
             };
+            return result;  
     }
     }
 }
