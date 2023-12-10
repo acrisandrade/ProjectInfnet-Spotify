@@ -11,10 +11,22 @@ namespace Spotify.Repository.Conta
     {
         private static List<Usuario>usuarios = new List<Usuario>();
 
+        public void Atualizar(Usuario usuario)
+        {
+            Usuario UsuarioAntigo = this.ObtemUsuario(usuario.Id);
+            UsuarioRepository.usuarios.Remove(UsuarioAntigo);
+            UsuarioRepository.usuarios.Add(UsuarioAntigo);
+        }
+
         public void IncluiUsuario(Usuario usuario)
         {
             usuario.Id = Guid.NewGuid();
             UsuarioRepository.usuarios.Add(usuario);
+        }
+
+        public object ObtemMusica(Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         public Usuario ObtemUsuario(Guid id)

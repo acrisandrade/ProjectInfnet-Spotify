@@ -66,7 +66,10 @@ namespace Spotify.Domain.Conta.Agreggates
             });
         }
 
-
+public void Favoritar(Musica musica)
+        {
+            this.Playlists.FirstOrDefault(x => x.Nome == "Favoritas").Musicas.Add(musica);
+        }
 
 
         private void AdicionaCartao(Cartao cartao)

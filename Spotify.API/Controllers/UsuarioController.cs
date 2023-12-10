@@ -36,5 +36,13 @@ namespace Spotify.API.Controllers
                 return NotFound();
         return Ok(result);
         }
+        [HttpPost("{id}/favoritar")]//cria uma rota
+        public IActionResult FavoritaAMusica(Guid id,[FromBody] FavoritarDto favoritarDto) {
+
+             this._usuarioService.FavoritarMusica(id, favoritarDto.IdMusica);
+            return Ok();
+        }
+
+
     }
 }

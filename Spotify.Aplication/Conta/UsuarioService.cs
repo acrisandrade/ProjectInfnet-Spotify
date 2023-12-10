@@ -1,4 +1,5 @@
 ﻿using Spotify.Aplication.Conta.Dto;
+using Spotify.Aplication.Streaming;
 using Spotify.Core.Exception;
 using Spotify.Domain.Conta.Agreggates;
 using Spotify.Domain.Streaming.Aggregates;
@@ -19,6 +20,7 @@ namespace Spotify.Aplication.Conta
 
 
         private UsuarioRepository usuarioRepository = new UsuarioRepository();
+        private BandaService bandaService = new BandaService();
 
 
         public CriarContaDTO CriarConta(CriarContaDTO conta)
@@ -52,7 +54,35 @@ namespace Spotify.Aplication.Conta
             return conta;
         }
 
-        public CriarContaDTO ObtemUsuario(Guid id)
+        public void FavoritarMusica(Guid id, Guid idMusica)
+        {//Primeiro obtenho o usuario
+            var usuario = this.usuarioRepository.ObtemUsuario(id);
+            if (usuario == null)
+            {
+                throw new BussinesException(new BusinessValidation()
+                {
+                    MensagemErro="usuarionao encotrado",
+                    NomeErroDefaul=nameof(usuario)
+                });
+            }
+            //obtenho a musica
+            var musica = this.bandaService.ObterMusica(idMusica);
+            if (musica == null)
+
+                throw new BussinesException(new BusinessValidation()
+                {
+                    MensagemErro = "Musica nao encotrada",
+                    NomeErroDefaul = nameof(FavoritarMusica)
+                });
+
+
+            usuario.Favoritar(musica);
+            this.usuarioRepository.Atualizar(usuario);
+
+        }
+
+
+public CriarContaDTO ObtemUsuario(Guid id)
         {
             var usuario = this.usuarioRepository.ObtemUsuario(id);
             if (usuario == null)
@@ -62,6 +92,7 @@ namespace Spotify.Aplication.Conta
             {
                 Id = usuario.Id,
                 Cartao = new CartaoDTO()
+
                 {
                     Ativo = usuario.Cartoes.FirstOrDefault().Ativo,
                     Limite = usuario.Cartoes.FirstOrDefault().Limite,

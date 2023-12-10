@@ -99,5 +99,11 @@ namespace Spotify.Aplication.Streaming
             return dto;
 
         }
+
+        public Musica ObterMusica(Guid idMusica)
+        {
+            return this.repository.ObterMusica(idMusica);
+        }
+
     }
 }

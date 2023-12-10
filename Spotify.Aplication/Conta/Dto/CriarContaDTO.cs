@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Spotify.Aplication.Streaming.Dto;
+using Spotify.Domain.Streaming.Aggregates;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -22,6 +24,8 @@ namespace Spotify.Aplication.Conta.Dto
 
         public CartaoDTO Cartao { get; set; }
 
+        public List<playlistDto> playlistDtos { get; set; }
+
     }
 
     public class CartaoDTO
@@ -36,6 +40,13 @@ namespace Spotify.Aplication.Conta.Dto
     public Boolean Ativo { get; set; }
 }
 
+    public class playlistDto
+    {
+        public Guid Id { get; set; }
+        public string Nome { get; set; }
+        public Boolean Publica { get; set; }
 
+        public List<MusicaDto>Musicas { get; set; }
+    }
 
 }
