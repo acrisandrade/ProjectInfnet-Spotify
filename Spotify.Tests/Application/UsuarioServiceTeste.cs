@@ -36,7 +36,7 @@ namespace Spotify.Tests.Application
         //Teste caso nao encontre a conta
         [Fact]
 
-        public void NaocriaContaComPlanoInvalido()
+        public async Task NaocriaContaComPlanoInvalido()
         {
             CriarContaDTO criarContaDTO = new CriarContaDTO()
             {
@@ -51,7 +51,7 @@ namespace Spotify.Tests.Application
                 PlanoId =  Guid.NewGuid()
             };
             UsuarioService service = new UsuarioService();
-            Assert.Throws<BussinesException>(() => service.CriarConta(criarContaDTO));
+            await Assert.ThrowsAsync<BussinesException>(() => service.CriarConta(criarContaDTO));
 
         }
     }

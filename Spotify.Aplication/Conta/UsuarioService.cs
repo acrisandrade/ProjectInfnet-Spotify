@@ -1,10 +1,8 @@
 ﻿using Spotify.Aplication.Conta.Dto;
-using Spotify.Aplication.Streaming;
 using Spotify.Core.Exception;
 using Spotify.Domain.Conta.Agreggates;
-using Spotify.Domain.Streaming.Aggregates;
+using Spotify.Repository;
 using Spotify.Repository.Conta;
-using Spotify.Repository.Streaming;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,19 +12,21 @@ using System.Threading.Tasks;
 namespace Spotify.Aplication.Conta
 {
     public class UsuarioService
+
     {
+        private PlanoRepository planoRepository= new PlanoRepository();
+        private UsuarioRepository usuarioRepository=new UsuarioRepository();
+        private BandaRepository BandaRepository = new BandaRepository();
+      
 
-        private PlanoRepository planoRepository = new PlanoRepository();
+        
+       
 
 
-        private UsuarioRepository usuarioRepository = new UsuarioRepository();
-        private BandaService bandaService = new BandaService();
-
-
-        public CriarContaDTO CriarConta(CriarContaDTO conta)
+        public async  Task<CriarContaDTO> CriarConta(CriarContaDTO conta)
         {
 
-            Plano plano = this.planoRepository.PegarPlanoPeloID(conta.PlanoId);
+            Plano plano = await this.planoRepository.ObterPlano(conta.PlanoId);
 
             if (plano == null)
             {
@@ -54,7 +54,7 @@ namespace Spotify.Aplication.Conta
             return conta;
         }
 
-        public void FavoritarMusica(Guid id, Guid idMusica)
+        public async  Task FavoritarMusica(Guid id, Guid idMusica)
         {//Primeiro obtenho o usuario
             var usuario = this.usuarioRepository.ObtemUsuario(id);
             if (usuario == null)
@@ -66,7 +66,7 @@ namespace Spotify.Aplication.Conta
                 });
             }
             //obtenho a musica
-            var musica = this.bandaService.ObterMusica(idMusica);
+            var musica = await  this.BandaRepository.ObterMusica(idMusica);
             if (musica == null)
 
                 throw new BussinesException(new BusinessValidation()
@@ -112,13 +112,13 @@ public CriarContaDTO ObtemUsuario(Guid id)
                     Id = item.id,
                     Nome = item.Nome,
                     Publica = item.Publica,
-                    Musicas=new List<Streaming.Dto.MusicaDto>()
+                    Musicas=new List<Conta.Dto.MusicaDto>()
                 };
                 foreach (var musicas in item.Musicas)
                 {
-                    playlist.Musicas.Add(new Streaming.Dto.MusicaDto()
+                    playlist.Musicas.Add(new Conta.Dto.MusicaDto()
                     {
-                        Duracao = musicas.Duracao.valor,
+                        Duracao = musicas.Duracao,
                         Id = musicas.Id,
                         Nome = musicas.Nome
                     });

@@ -1,6 +1,4 @@
-﻿
-using Spotify.Domain.Conta.ValueObject;
-using Spotify.Domain.Streaming.Aggregates;
+﻿using Spotify.Domain.Conta.ValueObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +16,6 @@ namespace Spotify.Domain.Conta.Agreggates
         public List <Cartao> Cartoes { get; set;}
 
         public List <Playlist> Playlists { get; set; }
-        public  List <Banda> BandasFavoritas { get; set; }    
 
         public List <Assinatura>Assinaturas {  get; set; }    
   
@@ -26,7 +23,6 @@ namespace Spotify.Domain.Conta.Agreggates
         public Usuario()
         {
             this.Playlists = new List<Playlist>();
-            this.BandasFavoritas = new List<Banda>();
             this.Assinaturas = new List<Assinatura>();
             this.Cartoes = new List<Cartao>(); 
 

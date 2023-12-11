@@ -1,6 +1,5 @@
 ﻿using Spotify.Domain.Conta.Agreggates;
 using Spotify.Domain.Conta.Exception;
-using Spotify.Domain.Streaming.Aggregates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace Spotify.Tests.Domain.Conta
             Plano plano = new Plano()
             {
                 Descricao = "Aqui você encontra todo tipo de muica.",
-                Id = Guid.NewGuid(),
+                id = Guid.NewGuid(),
                 Nome = "Stars",
                 Valor = 19.90M
             };
@@ -49,7 +48,7 @@ namespace Spotify.Tests.Domain.Conta
             Plano plano = new Plano()
             {
                 Descricao = "Lorem ipsum",
-                Id = Guid.NewGuid(),
+                id = Guid.NewGuid(),
                 Nome = "star",
                 Valor = 19.90M
             };
