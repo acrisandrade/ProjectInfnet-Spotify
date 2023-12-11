@@ -100,7 +100,34 @@ public CriarContaDTO ObtemUsuario(Guid id)
                 },
                 CPF = usuario.CPF.NumeroFormatado(),
                 Nome = usuario.Nome,
+                playlistDtos = new List<playlistDto>()
             };
+
+
+            foreach (var item in usuario.Playlists)
+            {
+                var playlist = new playlistDto() 
+               
+                {
+                    Id = item.id,
+                    Nome = item.Nome,
+                    Publica = item.Publica,
+                    Musicas=new List<Streaming.Dto.MusicaDto>()
+                };
+                foreach (var musicas in item.Musicas)
+                {
+                    playlist.Musicas.Add(new Streaming.Dto.MusicaDto()
+                    {
+                        Duracao = musicas.Duracao.valor,
+                        Id = musicas.Id,
+                        Nome = musicas.Nome
+                    });
+                }
+                result.playlistDtos.Add(playlist);  
+            }
+
+           
+
             return result;  
     }
     }

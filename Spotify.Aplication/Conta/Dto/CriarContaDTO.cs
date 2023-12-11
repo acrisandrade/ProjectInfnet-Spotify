@@ -25,7 +25,6 @@ namespace Spotify.Aplication.Conta.Dto
         public CartaoDTO Cartao { get; set; }
 
         public List<playlistDto> playlistDtos { get; set; }
-
     }
 
     public class CartaoDTO
